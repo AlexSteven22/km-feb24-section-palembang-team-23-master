@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team-23 Pizza Sales Report</title>
+    <link rel="stylesheet" href="index.css">
+    <script src="https://cdn.jsdelivr.net/npm/chart.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/moment.js/2.29.1/moment.min.js"></script>
+    <script src="chart.js"></script> <!-- Pastikan file chart.js ada di lokasi yang tepat -->
+    <script type="text/javascript" src="multiselect-dropdown.js"></script>
+    <script type="text/css"></script>
+    <style type="text/css">
+        select{
+            color: black;
+            width: 15em;
+        }
+    </style>
+</head>
+
+<body class="all">
+    <section class="sec1">
+        <div class="title">PIZZA SALES REPORT</div>
+        <p>Jan 2015 - Dec 2015</p>
+    </section>
+    <section class="sec2">
+        <div class= "cont-mont">
+          <select id="month-select" name="month" multiple multiselect-search="true" 
+          multiselect-select-all="true">
+            <option value="January">January</option>
+            <option value="February">February</option>
+            <option value="March">March</option>
+            <option value="April">April</option>
+            <option value="May">May</option>
+            <option value="June">June</option>
+            <option value="July">July</option>
+            <option value="August">August</option>
+            <option value="September">September</option>
+            <option value="October">October</option>
+            <option value="November">November</option>
+            <option value="December">December</option>
+          </select>
+        </div>
+
+        <div class="tot-or">TOTAL ORDERS<h1>0</h1>
+        </div>
+        <div class="piz-type">NO. OF PIZZA TYPES<h1>0</h1>
+        </div>
+        <div class="tot-rev">TOTAL REVENUE<h1>$0</h1>
+        </div>
+        <div class="avg-rev">AVERAGE REVENUE<h1>$0</h1>
+        </div>
+        <div class="piz-name">PIZZA NAME</div>
+    </section>
+    <section class="sec3">
+        <p>TOTAL PIZZA SALES</p>
+        <h1>0</h1> <!-- Elemen ini akan diperbarui secara dinamis -->
+    </section>
+    <section class="sec4">
+        <div class="chartpart1">
+            <div class="chart1">
+                <canvas id="myChart1"></canvas>
+            </div>
+            <div class="chart2">
+                <canvas id="myChart2"></canvas>
+            </div>
+        </div>
+        <div class="chartpart2">
+            <div class="chart3">
+                <canvas id="myChart3"></canvas>
+            </div>
+            <div class="chart4">
+                <canvas id="myChart4"></canvas>
+            </div>
+            <div class="chart5">
+                <canvas id="myChart5"></canvas>
+            </div>
+        </div>
+    </section>
+</body>
+
+
+</html>
