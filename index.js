@@ -6,7 +6,7 @@ const fetchDataset = async () => {
     const data = await response.json();
     return data;
   } catch (error) {
-    console.error("Error fetching data: ", error);
+    alert("Failed to fetch dataset. Please try again later.");
   }
 };
 
@@ -22,15 +22,14 @@ const getFilteredData = (dataset, selectedMonths, selectedPizzas) => {
 const mappedData = async (filteredData) => {
   const dataMonths = filteredData.map((data) => ({ ...data, date: data.date.split("/") }));
   const reduced = dataMonths.reduce((accumulator, currentVal) => {
-    const month = months[parseInt(currentVal.date[0] - 1)];
+    const month = months[parseInt(currentVal.date[0]) - 1]; // Use parseInt to handle month as an integer
     if (accumulator[month] == null) accumulator[month] = [];
     accumulator[month].push(currentVal);
     return accumulator;
   }, {});
 
-  const reducedMonths = Object.entries(reduced).map((item) => item.filter((data) => typeof data === "object").flat());
-  const mappedReduced = reducedMonths.map((item) =>
-    item.map((data) => parseInt(data.quantity) * parseFloat(data.price))
+  const mappedReduced = Object.keys(reduced).map((month) =>
+    reduced[month].map((data) => parseInt(data.quantity) * parseFloat(data.price))
   );
   return mappedReduced;
 };
@@ -63,7 +62,7 @@ const orderByCategory = async (filteredData) => await mappedByCategory(filteredD
 const orderBySize = async (filteredData) => await mappedBySize(filteredData);
 const totalRevenueMoM = async (filteredData) => {
   const data = await mappedData(filteredData);
-  if (data) return data.map((item) => parseInt(item.reduce((acc, curr) => acc + curr, 0).toFixed()));
+  if (data) return data.map((item) => item.reduce((acc, curr) => acc + curr, 0));
 };
 const totalOrder = async (filteredData) => {
   const data = await mappedData(filteredData);
@@ -80,19 +79,15 @@ document.addEventListener('DOMContentLoaded', async function () {
     const selectedPizzas = Array.from(document.getElementById('pizza-select').selectedOptions).map(option => option.value);
     const filteredData = getFilteredData(dataset, selectedMonths, selectedPizzas);
 
-    console.log("Filtered Data:", filteredData);
 
     let revenue = await totalRevenueMoM(filteredData);
-
-    console.log("Revenue Data:", revenue);
 
     let order = await totalOrder(filteredData);
     let ordsize = await orderBySize(filteredData);
     let ordcategory = await orderByCategory(filteredData);
 
     if (!revenue || !order || !ordsize || !ordcategory) {
-        console.error("Failed to fetch or process data.");
-        return;
+      return;
     }
 
     // Destroy previous charts if they exist
@@ -117,204 +112,202 @@ document.addEventListener('DOMContentLoaded', async function () {
     // Create Chart 1 (Revenue MoM)
     const ctx1 = document.getElementById('myChart1');
     chart1 = new Chart(ctx1, {
-        type: 'line',
-        data: {
-            datasets: [{
-                label: "Revenue MoM",
-                data: revenue
-            }],
-            labels: months
+      type: 'line',
+      data: {
+        datasets: [{
+          label: "Revenue MoM",
+          data: revenue
+        }],
+        labels: selectedMonths.map(month => months[month - 1]) // Only show selected months
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+            min: 0,
+            grid: {
+              display: false
+            }
+          },
+          x: {
+            grid: {
+              display: false
+            }
+          }
         },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    min: 0,
-                    grid: {
-                        display: false
-                    }
-                },
-                x: {
-                    grid: {
-                        display: false
-                    }
-                }
-            },
-            maintainAspectRatio: false
-        }
+        maintainAspectRatio: false
+      }
     });
-
-    // Create other charts similarly...
 
     // Create Chart 2 (Sales per Month)
     const ctx2 = document.getElementById('myChart2');
     chart2 = new Chart(ctx2, {
-        type: 'bar',
-        data: {
-            datasets: [{
-                label: "Sales per Month",
-                data: order
-            }],
-            labels: months
+      type: 'bar',
+      data: {
+        datasets: [{
+          label: "Sales per Month",
+          data: order
+        }],
+        labels: selectedMonths.map(month => months[month - 1]) // Only show selected months
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+            grid: {
+              display: false
+            }
+          },
+          x: {
+            grid: {
+              display: false
+            }
+          }
         },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    grid: {
-                        display: false
-                    }
-                },
-                x: {
-                    grid: {
-                        display: false
-                    }
-                }
-            },
-            maintainAspectRatio: false
-        },
-        plugins: [ChartDataLabels]
+        maintainAspectRatio: false
+      },
+      plugins: [ChartDataLabels]
     });
 
     // Create Chart 3 (Revenue vs Order)
     const ctx3 = document.getElementById('myChart3').getContext('2d');
     chart3 = new Chart(ctx3, {
-        type: 'bar',
-        data: {
-            labels: months,
-            datasets: [
-                {
-                    label: 'Revenue',
-                    type: 'line',
-                    data: revenue,
-                    borderWidth: 3,
-                    borderColor: '#5fbaff',
-                    backgroundColor: '#5fbaff',
-                    pointRadius: 0,
-                    pointHoverRadius: 4,
-                    pointBackgroundColor: '#5fbaff',
-                    pointBorderColor: '#5fbaff',
-                    pointHoverBackgroundColor: '#5fbaff',
-                    pointHoverBorderColor: '#5fbaff',
-                    pointStyle: 'circle',
-                    datalabels: {
-                        display: false
-                    }
-                },
-                {
-                    label: 'Order Count',
-                    type: 'bar',
-                    data: order,
-                    borderWidth: 1
-                }
-            ]
+      type: 'bar',
+      data: {
+        labels: selectedMonths.map(month => months[month - 1]), // Only show selected months
+        datasets: [
+          {
+            label: 'Revenue',
+            type: 'line',
+            data: revenue,
+            borderWidth: 3,
+            borderColor: '#5fbaff',
+            backgroundColor: '#5fbaff',
+            pointRadius: 0,
+            pointHoverRadius: 4,
+            pointBackgroundColor: '#5fbaff',
+            pointBorderColor: '#5fbaff',
+            pointHoverBackgroundColor: '#5fbaff',
+            pointHoverBorderColor: '#5fbaff',
+            pointStyle: 'circle',
+            datalabels: {
+              display: false
+            }
+          },
+          {
+            label: 'Order Count',
+            type: 'bar',
+            data: order,
+            borderWidth: 1
+          }
+        ]
+      },
+      options: {
+        scales: {
+          y: {
+            beginAtZero: true,
+            grid: {
+              display: false
+            }
+          },
+          x: {
+            grid: {
+              display: false
+            }
+          }
         },
-        options: {
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    grid: {
-                        display: false
-                    }
-                },
-                x: {
-                    grid: {
-                        display: false
-                    }
-                }
-            },
-            plugins: {
-                annotation: {
-                    annotations: revenue.map((value, index) => ({
-                        type: 'line',
-                        scaleID: 'y',
-                        value: value,
-                        borderColor: 'rgba(255, 99, 132, 0.5)',
-                        borderWidth: 2,
-                        label: {
-                            content: `Revenue: ${value}`,
-                            enabled: true,
-                            position: 'right'
-                        }
-                    }))
-                }
-            },
-            maintainAspectRatio: false
+        plugins: {
+          annotation: {
+            annotations: revenue.map((value, index) => ({
+              type: 'line',
+              scaleID: 'y',
+              value: value,
+              borderColor: 'rgba(255, 99, 132, 0.5)',
+              borderWidth: 2,
+              label: {
+                content: `Revenue: ${value}`,
+                enabled: true,
+                position: 'right'
+              }
+            }))
+          }
         },
-        plugins: [ChartDataLabels]
+        maintainAspectRatio: false
+      },
+      plugins: [ChartDataLabels]
     });
 
     // Create Chart 4 (Order by Pizza Size)
     const ctx4 = document.getElementById('myChart4');
     chart4 = new Chart(ctx4, {
-        type: 'pie',
-        data: {
-            datasets: [{
-                data: ordsize.map(item => item.value),
-                backgroundColor: ['#7FCFFF', '#6AC0FF', '#5AA5E6', '#57A6E6', '#4D93CC'],
-            }],
-            labels: ordsize.map(item => item.label)
-        },
-        options: {
-            maintainAspectRatio: false,
-            plugins: {
-                datalabels: {
-                    formatter: (value, ctx) => {
-                        const totalSum = ctx.dataset.data.reduce((acc, curr) => acc + curr, 0);
-                        const percentage = value / totalSum * 100;
-                        return `${percentage.toFixed(1)}%`;
-                    }
-                },
-                legend: {
-                    position: 'right'
-                },
-                title: {
-                    display: true,
-                    text: 'Order by Pizza Size',
-                    position: 'top',
-                    font: {
-                        size: 10
-                    }
-                }
+      type: 'pie',
+      data: {
+        datasets: [{
+          data: ordsize.map(item => item.value),
+          backgroundColor: ['#7FCFFF', '#6AC0FF', '#5AA5E6', '#57A6E6', '#4D93CC'],
+        }],
+        labels: ordsize.map(item => item.label)
+      },
+      options: {
+        maintainAspectRatio: false,
+        plugins: {
+          datalabels: {
+            formatter: (value, ctx) => {
+              const totalSum = ctx.dataset.data.reduce((acc, curr) => acc + curr, 0);
+              const percentage = value / totalSum * 100;
+              return `${percentage.toFixed(1)}%`;
             }
-        },
-        plugins: [ChartDataLabels]
+          },
+          legend: {
+            position: 'right'
+          },
+          title: {
+            display: true,
+            text: 'Order by Pizza Size',
+            position: 'top',
+            font: {
+              size: 10
+            }
+          }
+        }
+      },
+      plugins: [ChartDataLabels]
     });
 
     // Create Chart 5 (Order by Category)
     const ctx5 = document.getElementById('myChart5');
     chart5 = new Chart(ctx5, {
-        type: 'bar',
-        data: {
-            datasets: [{
-                label: "Order by Category",
-                data: ordcategory
-            }],
-            labels: ["Classic", "Supreme", "Vegie", "Chicken"]
-        },
-        options: {
-            maintainAspectRatio: false,
-            scales: {
-                y: {
-                    beginAtZero: true,
-                    grid: {
-                        display: false
-                    }
-                },
-                x: {
-                    grid: {
-                        display: false
-                    }
-                }
+      type: 'bar',
+      data: {
+        datasets: [{
+          label: "Order by Category",
+          data: ordcategory
+        }],
+        labels: ["Classic", "Supreme", "Vegie", "Chicken"]
+      },
+      options: {
+        maintainAspectRatio: false,
+        scales: {
+          y: {
+            beginAtZero: true,
+            grid: {
+              display: false
             }
-        },
-        plugins: [ChartDataLabels]
+          },
+          x: {
+            grid: {
+              display: false
+            }
+          }
+        }
+      },
+      plugins: [ChartDataLabels]
     });
-};
+  };
 
-document.getElementById('month-select').addEventListener('change', updateCharts);
-document.getElementById('pizza-select').addEventListener('change', updateCharts);
+  document.getElementById('month-select').addEventListener('change', updateCharts);
+  document.getElementById('pizza-select').addEventListener('change', updateCharts);
 
-// Initial load
-updateCharts();
+  // Initial load
+  updateCharts();
 });
