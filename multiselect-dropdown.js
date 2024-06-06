@@ -1,96 +1,5 @@
 var style = document.createElement('style');
 style.setAttribute("id","multiselect_dropdown_styles");
-style.innerHTML = `
-.multiselect-dropdown{
-  display: inline-block;
-  padding-top:12px;
-  padding-left:15px;
-  height : 75%;
-  width : 100%;
-  position: relative;
-  background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3e%3cpath fill='none' stroke='%23343a40' stroke-linecap='round' stroke-linejoin='round' stroke-width='2' d='M2 5l6 6 6-6'/%3e%3c/svg%3e");
-  background-repeat: no-repeat;
-  background-position: right .75rem center;
-  background-size: 16px 12px
-}
-.multiselect-dropdown span.placeholder{
-  margin-right:0.5em; 
-  margin-bottom:2px;
-  padding:1px 0; 
-  border-radius: 4px; 
-  display:inline-block;
-  font-size:1.6em;
-  color:black;
-}
-.multiselect-dropdown span.optext{
-  background-color:lightgray;
-  padding:1px 0.75em; 
-  margin-right:1em; 
-  margin-bottom:2px;
-  border-radius: 4px; 
-  display:inline-block;
-}
-.multiselect-dropdown span.optext .optdel {
-  float: right;
-  margin: 0 -6px 1px 5px;
-  font-size: 0.7em;
-  cursor: pointer;
-  color: #666;
-}
-.multiselect-dropdown span.optext .optdel:hover { color: #c66;}
-
-.multiselect-dropdown-list-wrapper{
-  box-shadow: gray 0 3px 8px;
-  z-index: 100;
-  padding:2px;
-  border-radius: 4px;
-  border: solid 1px #ced4da;
-  display: none;
-  margin: -1px;
-  position: absolute;
-  top:0;
-  left: 0;
-  right: 0;
-  background: white;
-}
-.multiselect-dropdown-list-wrapper .multiselect-dropdown-search{
-  margin-bottom:5px;
-}
-.multiselect-dropdown-list{
-  padding:2px;
-  height: 15rem;
-  overflow-y:auto;
-  overflow-x: hidden;
-}
-.multiselect-dropdown-list::-webkit-scrollbar {
-  width: 6px;
-}
-.multiselect-dropdown-list::-webkit-scrollbar-thumb {
-  background-color: #bec4ca;
-  border-radius:3px;
-}
-
-.multiselect-dropdown-list div{
-  padding: 2px;
-}
-.multiselect-dropdown-list input{
-  height: 1em;
-  width: 1em;
-  margin-right: 0.35em;  
-}
-.multiselect-dropdown-list div.checked{
-
-}
-.multiselect-dropdown-list div:hover{
-  background-color: #ced4da;
-}
-.multiselect-dropdown span.maxselected {
-  width:60%;
-  margin-top:10px;
-
-}
-.multiselect-dropdown-all-selector {border-bottom:solid 1px #999;}
-`;
 document.head.appendChild(style);
 
 function MultiselectDropdown(options){
@@ -105,6 +14,7 @@ function MultiselectDropdown(options){
     
     ...options
   };
+
   function newEl(tag,attrs){
     var e=document.createElement(tag);
     if(attrs!==undefined) Object.keys(attrs).forEach(k=>{
@@ -121,7 +31,7 @@ function MultiselectDropdown(options){
   }
 
   
-  document.querySelectorAll("select[multiple]").forEach((el,k)=>{
+  document.querySelectorAll("select[id='month-select'], select[id='pizza-select']").forEach((el,k)=>{
     
     var div=newEl('div',{class:'multiselect-dropdown',style:{width:config.style?.width??el.clientWidth+'px',padding:config.style?.padding??''}});
     el.style.display='none';
@@ -218,9 +128,10 @@ function MultiselectDropdown(options){
         listWrap.style.display='none';
         div.refresh();
       }
-    });    
+    });   
   });
-}
+};
+
 
 window.addEventListener('load',()=>{
   MultiselectDropdown(window.MultiselectDropdownOptions);
