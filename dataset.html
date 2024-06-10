@@ -12,17 +12,25 @@
 </head>
 
 <body class="all">
-    <header>
+    <div class="navbar">
         <img class="logo" src="23 logo.png" alt="" width="200" height="100">
-        <nav>
-            <ul class="nav_links">
-                <li><a href="home.html">Home</a></li>
-                <li><a href="index.html">Reports</a></li>
-                <li><a href="dataset.html">Data Set</a></li>
-                <li><a href="our_team.html">Our Team</a></li>
-            </ul>
-        </nav>
-    </header>
+
+        <a href="home.html">Home</a>
+        <a href="index.html">Report</a>
+        <div class="dropdown">
+          <button class="dropbtn">About 
+            <i class="fa fa-caret-down"></i>
+          </button>
+          <div class="dropdown-content">
+            <a href="https://www.canva.com/design/DAGGziJvkkU/OpYjRLAB5tK8qw0S-whA0g/view?utm_content=DAGGziJvkkU&utm_campaign=designshare&utm_medium=link&utm_source=editor" target="_blank">Capstone Project</a>
+            <a href="https://mavenanalytics.io/data-playground?page=6&pageSize=5" target="_blank">Dataset Source</a>
+            <a href="https://drive.google.com/file/d/1moCEDXeSZqe4OUiROFCqApM_Eb0jAWT8/view?usp=sharing" target="_blank">ERD</a>
+          </div>
+        </div> 
+        <a href="dataset.html">Dataset</a>
+        <a href="our_team.html">Our Team</a>
+      </div>
+
     <main class="main-data" style="padding-top: 40px;">
         <div>
             <table id="salesTable" class="display" style="width:100%;">
