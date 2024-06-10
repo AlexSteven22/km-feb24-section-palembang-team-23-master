@@ -91,7 +91,7 @@ header {
     justify-content: center;
 }
 
-/* Style the links inside the navigation bar */
+
 .topnav a {
     float: left;
     color: #f2f2f2;
@@ -101,19 +101,18 @@ header {
     font-size: 17px;
 }
 
-/* Change the color of links on hover */
 .topnav a:hover {
     background-color: #ddd;
     color: black;
 }
 
-/* Add a color to the active/current link */
+
 .topnav a.active {
     background-color: #04AA6D;
     color: white;
 }
 
-/* Right-aligned section inside the top navigation */
+
 .topnav-right {
     float: right;
 }
@@ -220,7 +219,6 @@ header {
 }
 
 .piz-name {
-
     width: 200px;
     background-color: #5fbaff;
     padding-top: 5px;
@@ -321,7 +319,6 @@ h1 {
 }
 
 .month select {
-    /* Removed display: none rule */
     position: absolute;
     top: 100%;
     left: 0;
@@ -532,11 +529,8 @@ h1 {
 .penjelasan {
     padding-top: 200px;
     display: flex;
-    /* Make the container a flexbox for two columns */
     flex-wrap: wrap;
-    /* Allow content to wrap onto multiple rows if needed */
     margin: auto;
-    /* Add some margin for spacing */
     margin-left: 200px;
     margin-right: 200px;
 
@@ -544,11 +538,8 @@ h1 {
 
 .h1-container {
     margin: auto;
-    /* Add margin for spacing between elements */
     text-align: center;
-    /* Center the content within each container (optional) */
     width: 50%;
-    /* Make each container half the width of the parent */
     width: 500px;
     font-family: Cambria, Cochin, Georgia, Times, 'Times New Roman', serif;
     font-size: 20px;

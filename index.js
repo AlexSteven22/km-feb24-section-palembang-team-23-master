@@ -22,7 +22,7 @@ const getFilteredData = (dataset, selectedMonths, selectedPizzas) => {
 const mappedData = async (filteredData) => {
   const dataMonths = filteredData.map((data) => ({ ...data, date: data.date.split("/") }));
   const reduced = dataMonths.reduce((accumulator, currentVal) => {
-    const month = months[parseInt(currentVal.date[0]) - 1]; // Use parseInt to handle month as an integer
+    const month = months[parseInt(currentVal.date[0]) - 1]; 
     if (accumulator[month] == null) accumulator[month] = [];
     accumulator[month].push(currentVal);
     return accumulator;
@@ -89,15 +89,13 @@ document.addEventListener('DOMContentLoaded', async function () {
     if (!revenue || !order || !ordsize || !ordcategory) {
       return;
     }
-
-    // Destroy previous charts if they exist
     if (chart1) chart1.destroy();
     if (chart2) chart2.destroy();
     if (chart3) chart3.destroy();
     if (chart4) chart4.destroy();
     if (chart5) chart5.destroy();
 
-    // Update dynamic values
+    
     document.getElementById('total-orders').textContent = filteredData.length;
     document.getElementById('no-of-pizza-types').textContent = [...new Set(filteredData.map(data => data.pizza_type_id))].length;
     const totalRevenue = revenue.reduce((acc, curr) => acc + curr, 0);
@@ -105,11 +103,11 @@ document.addEventListener('DOMContentLoaded', async function () {
     const averageRevenue = totalRevenue / (revenue.length || 1);
     document.getElementById('average-revenue').textContent = `$${averageRevenue.toFixed(2)}`;
 
-    // Update total pizza sales
+    
     const totalPizzaSales = filteredData.reduce((acc, curr) => acc + parseInt(curr.quantity), 0);
     document.getElementById('total-pizza-sales').textContent = totalPizzaSales;
 
-    // Create Chart 1 (Revenue MoM)
+    
     const ctx1 = document.getElementById('myChart1');
     chart1 = new Chart(ctx1, {
       type: 'line',
@@ -118,7 +116,7 @@ document.addEventListener('DOMContentLoaded', async function () {
           label: "Revenue MoM",
           data: revenue
         }],
-        labels: selectedMonths.map(month => months[month - 1]) // Only show selected months
+        labels: selectedMonths.map(month => months[month - 1]) 
       },
       options: {
         scales: {
@@ -139,7 +137,7 @@ document.addEventListener('DOMContentLoaded', async function () {
       }
     });
 
-    // Create Chart 2 (Sales per Month)
+    
     const ctx2 = document.getElementById('myChart2');
     chart2 = new Chart(ctx2, {
       type: 'bar',
@@ -148,7 +146,7 @@ document.addEventListener('DOMContentLoaded', async function () {
           label: "Sales per Month",
           data: order
         }],
-        labels: selectedMonths.map(month => months[month - 1]) // Only show selected months
+        labels: selectedMonths.map(month => months[month - 1]) 
       },
       options: {
         scales: {
@@ -169,12 +167,12 @@ document.addEventListener('DOMContentLoaded', async function () {
       plugins: [ChartDataLabels]
     });
 
-    // Create Chart 3 (Revenue vs Order)
+    
     const ctx3 = document.getElementById('myChart3').getContext('2d');
     chart3 = new Chart(ctx3, {
       type: 'bar',
       data: {
-        labels: selectedMonths.map(month => months[month - 1]), // Only show selected months
+        labels: selectedMonths.map(month => months[month - 1]), 
         datasets: [
           {
             label: 'Revenue',
@@ -237,7 +235,7 @@ document.addEventListener('DOMContentLoaded', async function () {
       plugins: [ChartDataLabels]
     });
 
-    // Create Chart 4 (Order by Pizza Size)
+    
     const ctx4 = document.getElementById('myChart4');
     chart4 = new Chart(ctx4, {
       type: 'pie',
@@ -274,7 +272,7 @@ document.addEventListener('DOMContentLoaded', async function () {
       plugins: [ChartDataLabels]
     });
 
-    // Create Chart 5 (Order by Category)
+    
     const ctx5 = document.getElementById('myChart5');
     chart5 = new Chart(ctx5, {
       type: 'bar',
@@ -308,6 +306,6 @@ document.addEventListener('DOMContentLoaded', async function () {
   document.getElementById('month-select').addEventListener('change', updateCharts);
   document.getElementById('pizza-select').addEventListener('change', updateCharts);
 
-  // Initial load
+  
   updateCharts();
 });

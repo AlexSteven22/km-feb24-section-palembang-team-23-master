@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Team-23 Pizza Sales Report</title>
+    <link rel="stylesheet" href="index.css">
+    <link rel="stylesheet" href="https://cdn.datatables.net/1.10.21/css/jquery.dataTables.min.css">
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+    <script src="https://cdn.datatables.net/1.10.21/js/jquery.dataTables.min.js"></script>
+</head>
+
+<body class="all">
+    <header>
+        <img class="logo" src="23 logo.png" alt="" width="200" height="100">
+        <nav>
+            <ul class="nav_links">
+                <li><a href="home.html">Home</a></li>
+                <li><a href="index.html">Reports</a></li>
+                <li><a href="dataset.html">Data Set</a></li>
+                <li><a href="our_team.html">Our Team</a></li>
+            </ul>
+        </nav>
+    </header>
+    <main class="main-data" style="padding-top: 40px;">
+        <div>
+            <table id="salesTable" class="display" style="width:100%;">
+                <thead>
+                    <tr>
+                        <th>Order ID</th>
+                        <th>Date</th>
+                        <th>Time</th>
+                        <th>Order Details ID</th>
+                        <th>Pizza ID</th>
+                        <th>Quantity</th>
+                        <th>Pizza Type ID</th>
+                        <th>Size</th>
+                        <th>Price</th>
+                        <th>Name</th>
+                        <th>Category</th>
+                        <th>Ingredients</th>
+                    </tr>
+                </thead>
+                <tbody></tbody>
+            </table>
+        </div>
+
+        <script>
+              $(document).ready(function () {
+            $.ajax({
+                type: "GET",
+                url: "dataset_23.json",
+                dataType: "json",
+                success: function (data) {
+                    $('#salesTable').DataTable({
+                        data: data,
+                        columns: [
+                            { data: 'order_id' },
+                            { data: 'date' },
+                            { data: 'time' },
+                            { data: 'order_details_id' },
+                            { data: 'pizza_id' },
+                            { data: 'quantity' },
+                            { data: 'pizza_type_id' },
+                            { data: 'size' },
+                            { data: 'price' },
+                            { data: 'name' },
+                            { data: 'category' },
+                            { data: 'ingredients' }
+                        ]
+                    });
+                },
+                error: function (xhr, status, error) {
+                    console.error("Error loading JSON: " + status, error);
+                }
+            });
+        });
+        </script>
+    </main>
+</body>
+
+
+</html>
